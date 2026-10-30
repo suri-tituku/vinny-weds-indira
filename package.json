@@ -1,0 +1,14 @@
+{
+  "name": "vinay-indira-holy-wedding-invitation",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Mobile-first interactive Christian wedding invitation with a 3D envelope and floral animations.",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "UNLICENSED"
+}
