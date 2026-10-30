@@ -1,0 +1,24 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Vinay and Indira//Wedding Invitation//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:vinay-indira-wedding-20261105@wedding-invitation
+DTSTAMP:20261030T000000Z
+DTSTART:20261105T050000Z
+DTEND:20261105T063000Z
+SUMMARY:Vinay & Indira - Holy Wedding
+LOCATION:CSI Christ Church\, Bhadrachalam\, Telangana\, India
+DESCRIPTION:You are warmly invited to the holy matrimony of Vinay and Indira. Ceremony begins at 10:30 AM IST. Lunch follows at Akshaya Function Hall from 12:00 PM.
+END:VEVENT
+BEGIN:VEVENT
+UID:vinay-indira-lunch-20261105@wedding-invitation
+DTSTAMP:20261030T000000Z
+DTSTART:20261105T063000Z
+DTEND:20261105T083000Z
+SUMMARY:Vinay & Indira - Wedding Lunch
+LOCATION:Akshaya Function Hall\, Charla Road\, Bhadrachalam\, Telangana\, India
+DESCRIPTION:Wedding lunch for Vinay and Indira begins at 12:00 PM IST.
+END:VEVENT
+END:VCALENDAR
