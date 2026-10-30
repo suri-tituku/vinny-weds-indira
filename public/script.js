@@ -63,11 +63,15 @@ function openInvitation({ jump = true } = {}) {
   envelope.disabled = true;
   openButton.disabled = true;
 
+  // Give the flap time to open, then lift the entire paper card in front of
+  // the envelope pocket. This prevents the bottom half remaining hidden.
+  window.setTimeout(() => envelope.classList.add('letter-revealed'), reduceMotion ? 0 : 780);
+
   // Let the 3D paper travel out of the envelope before revealing the card.
   if (jump) {
     window.setTimeout(() => {
       invitation.scrollIntoView({ behavior: reduceMotion ? 'instant' : 'smooth', block: 'start' });
-    }, reduceMotion ? 30 : 2850);
+    }, reduceMotion ? 30 : 3450);
   }
 }
 

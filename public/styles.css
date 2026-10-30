@@ -576,3 +576,67 @@ html[data-motion="off"] .sound-dock.playing .sound-bars i { animation: none; hei
   .wedding-burst { display:none !important; }
 }
 html[data-motion="off"] .wedding-burst { display:none !important; }
+
+
+/* V8 SURGICAL FIX: button lives on the envelope, between seal and pocket edge. */
+.envelope-stage > .open-invite-button {
+  position: absolute;
+  z-index: 11;
+  left: 50%;
+  top: calc(50% + min(15vw, 64px));
+  transform: translate(-50%, -50%);
+  padding: 13px 22px;
+  white-space: nowrap;
+  max-width: calc(100% - 12px);
+  font-size: 10px;
+  box-shadow: 0 5px 17px rgba(99, 33, 55, .26), inset 0 1px #ffffff25;
+}
+.envelope-stage > .open-invite-button:hover {
+  transform: translate(-50%, calc(-50% - 3px));
+}
+.envelope-stage > .open-invite-button:active {
+  transform: translate(-50%, -50%) scale(.98);
+}
+.welcome.is-open .envelope-stage > .open-invite-button {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .24s, visibility 0s .24s;
+}
+
+/* Unfold the full letter, then layer it above the pocket once the flap clears. */
+.welcome.is-open .envelope-letter {
+  transform: translateY(-76%) translateZ(78px) rotateX(-2deg) scale(1.02);
+  transition: transform 1.38s .36s cubic-bezier(.16,.78,.24,1), opacity .9s .36s;
+}
+.welcome.is-open .envelope.letter-revealed .envelope-letter {
+  z-index: 7;
+}
+.welcome.is-open .envelope {
+  transform: translateY(20px) scale(1.03);
+}
+
+/* Separate and slightly enlarge the family heading above the decorative script. */
+.invitation-intro > .section-kicker {
+  position: relative;
+  z-index: 2;
+  font-size: clamp(11px, 1.45vw, 13px);
+  line-height: 1.5;
+  letter-spacing: .23em;
+  margin: 0 0 46px;
+}
+.invitation-intro > .main-heading {
+  margin-top: 0;
+  line-height: .86;
+}
+@media (max-width: 600px) {
+  .envelope-stage > .open-invite-button { padding: 12px 16px; font-size: 10px; }
+  .invitation-intro > .section-kicker {
+    font-size: 11px;
+    letter-spacing: .16em;
+    margin-bottom: 44px;
+  }
+}
+@media (max-width: 355px) {
+  .envelope-stage > .open-invite-button { padding: 10px 12px; font-size: 9px; }
+}

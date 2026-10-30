@@ -31,6 +31,7 @@
   // Guests may switch to an instrumental during their current visit.
   let chosenTrack = 'blessing';
   let playing = false;
+  let resumeWhenVisible = false;
   let musicAllowed = true; // A prior visit's off setting must not silently suppress the default track.
   let effects = recall('effects', 'true') !== 'false';
   let motion = recall('motion', prefersReducedMotion ? 'false' : 'true') !== 'false';
@@ -126,6 +127,7 @@
   }
 
   function pause() {
+    resumeWhenVisible = false; // A deliberate pause must stay paused across tab switches.
     musicAllowed = false;
     playing = false;
     stopCurrent();
@@ -229,12 +231,19 @@
     } else if (event.target.closest('button, a')) clickSound(false);
   }, { capture: true });
 
-  // When the user returns to the page after switching tabs, do not blast music.
+  // Temporarily pause in a background tab, then resume from the same position
+  // when the visitor returns. Do not override a deliberate manual pause.
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden && playing) {
-      playing = false;
-      stopCurrent();
-      update('Music paused while the tab was inactive. Tap to resume.');
+    if (document.hidden) {
+      resumeWhenVisible = playing && musicAllowed;
+      if (resumeWhenVisible) {
+        playing = false;
+        stopCurrent();
+        update('Music paused while the tab is inactive.');
+      }
+    } else if (resumeWhenVisible) {
+      resumeWhenVisible = false;
+      if (musicAllowed) play();
     }
   });
   audio.addEventListener('error', () => update('The uploaded MP3 could not load. Check assets/default-blessing-audio.mp3.'));
