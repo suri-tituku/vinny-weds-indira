@@ -15,10 +15,44 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&family=Great+Vibes&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
-  <script defer src="script.js"></script>
+  <link rel="stylesheet" href="styles.css?v=20261030-burst6" />
+  <script defer src="script.js?v=20261030-burst6"></script>
+  <script defer src="music.js?v=20261030-audiofix5"></script>
 </head>
 <body>
+
+  <audio id="blessingAudio" src="assets/default-blessing-audio.mp3" preload="auto" loop></audio>
+
+  <!-- Wedding music controls: compact vertical rail with expandable desktop label and settings drawer. -->
+  <aside class="sound-dock" id="soundDock" aria-label="Wedding music controls">
+    <div class="sound-rail">
+      <button id="musicToggle" class="sound-main-button" type="button" aria-pressed="false" aria-label="Play wedding music">
+        <span class="sound-icon" aria-hidden="true">♫</span>
+        <span class="sound-main-copy"><strong>Wedding music</strong><small id="musicState">Tap to play</small></span>
+        <span class="sound-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+      </button>
+      <button id="settingsToggle" class="sound-mini-button" type="button" aria-expanded="false" aria-controls="soundPanel" aria-label="Music settings">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.8 1.8 0 0 0 .36 1.99l.06.06-2 2-.07-.06a1.8 1.8 0 0 0-2-.36 1.8 1.8 0 0 0-1.1 1.66V21h-2.8v-.71a1.8 1.8 0 0 0-1.1-1.66 1.8 1.8 0 0 0-2 .36l-.07.06-2-2 .06-.06a1.8 1.8 0 0 0 .36-2A1.8 1.8 0 0 0 5.4 13.9H4.7v-2.8h.7A1.8 1.8 0 0 0 7.06 10a1.8 1.8 0 0 0-.36-2l-.06-.06 2-2 .07.06a1.8 1.8 0 0 0 2 .36A1.8 1.8 0 0 0 11.8 4.7V4h2.8v.7a1.8 1.8 0 0 0 1.1 1.66 1.8 1.8 0 0 0 2-.36l.07-.06 2 2-.06.06a1.8 1.8 0 0 0-.36 2 1.8 1.8 0 0 0 1.66 1.1h.71v2.8h-.71A1.8 1.8 0 0 0 19.4 15Z"/></svg>
+      </button>
+    </div>
+    <div id="soundPanel" class="sound-panel" hidden>
+      <div class="sound-panel-header"><strong>Wedding ambience</strong><button type="button" id="closeSounds" aria-label="Close music settings">×</button></div>
+      <p class="sound-intro">Your WhatsApp recording begins when you open the invitation. Guests can switch to any other wedding instrumental anytime.</p>
+      <label class="sound-label" for="musicTrack">Choose music</label>
+      <select id="musicTrack">
+        <option value="blessing">Original WhatsApp Wedding Audio · default</option>
+        <option value="grace">Chapel Grace · piano & strings</option>
+        <option value="vows">Sacred Vows · church organ</option>
+        <option value="bells">Wedding Bells · gentle chimes</option>
+      </select>
+      <div class="sound-volume-heading"><label class="sound-label" for="musicVolume">Music volume</label><output id="volumeValue" for="musicVolume">70%</output></div>
+      <input type="range" id="musicVolume" min="0" max="100" step="5" value="70" />
+      <label class="sound-check"><input type="checkbox" id="soundEffects" checked /> Envelope and button sounds</label>
+      <label class="sound-check"><input type="checkbox" id="motionEffects" checked /> Petals and gentle animations</label>
+      <p id="soundStatus" class="sound-status" role="status" aria-live="polite">Music is ready. Open the invitation to begin.</p>
+    </div>
+  </aside>
+
   <div class="grain" aria-hidden="true"></div>
   <div class="falling-petals" id="petals" aria-hidden="true"></div>
 

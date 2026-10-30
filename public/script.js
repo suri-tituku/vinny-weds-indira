@@ -9,9 +9,53 @@ const shareStatus = document.getElementById('shareStatus');
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 let opened = false;
 
+// One-time slow-motion celebration from the wax seal. It complements the
+// always-falling petals/hearts, and never blocks pointer/touch interactions.
+function releaseWeddingBurst() {
+  if (reduceMotion || document.documentElement.dataset.motion === 'off') return;
+  const stage = document.getElementById('envelopeStage');
+  if (!stage || stage.querySelector('.wedding-burst')) return;
+
+  const layer = document.createElement('div');
+  layer.className = 'wedding-burst';
+  layer.setAttribute('aria-hidden', 'true');
+  const small = window.matchMedia('(max-width: 600px)').matches;
+  const count = small ? 28 : 46;
+  const maxRadius = small ? 170 : 260;
+  const fragment = document.createDocumentFragment();
+
+  for (let i = 0; i < count; i += 1) {
+    // Golden-angle placement gives a natural circular cloud with no straight rows.
+    const angle = i * 2.399963229728653 + 0.24;
+    const spread = 0.42 + ((i * 19) % 13) / 20;
+    const radius = maxRadius * spread;
+    const dx = Math.cos(angle) * radius;
+    const dy = Math.sin(angle) * radius * 0.76;
+    const drift = Math.sin(angle * 3.17) * (small ? 28 : 44);
+    const piece = document.createElement('span');
+    const isHeart = i % 3 === 0;
+    piece.className = 'burst-piece ' + (isHeart ? 'burst-heart' : i % 4 === 0 ? 'burst-pink-petal' : 'burst-ivory-petal');
+    if (isHeart) piece.textContent = '♥';
+    piece.style.setProperty('--middle-x', `${Math.round(dx * 0.88)}px`);
+    piece.style.setProperty('--middle-y', `${Math.round(dy * 0.82)}px`);
+    piece.style.setProperty('--finish-x', `${Math.round(dx * 1.18 + drift)}px`);
+    piece.style.setProperty('--finish-y', `${Math.round(dy * 0.85 + (small ? 156 : 204))}px`);
+    piece.style.setProperty('--middle-rotation', `${Math.round(i * 41)}deg`);
+    piece.style.setProperty('--finish-rotation', `${Math.round(i * 41 + 170)}deg`);
+    piece.style.setProperty('--burst-delay', `${(i % 8) * 48}ms`);
+    piece.style.setProperty('--burst-duration', `${3900 + (i % 6) * 260}ms`);
+    piece.style.setProperty('--piece-scale', `${(0.77 + (i % 4) * 0.15).toFixed(2)}`);
+    fragment.appendChild(piece);
+  }
+  layer.appendChild(fragment);
+  stage.appendChild(layer);
+  window.setTimeout(() => layer.remove(), 6100);
+}
+
 function openInvitation({ jump = true } = {}) {
   if (opened) return;
   opened = true;
+  if (jump) releaseWeddingBurst();
   welcome.classList.add('is-open');
   document.body.classList.add('opened');
   invitation.setAttribute('aria-hidden', 'false');
@@ -23,7 +67,7 @@ function openInvitation({ jump = true } = {}) {
   if (jump) {
     window.setTimeout(() => {
       invitation.scrollIntoView({ behavior: reduceMotion ? 'instant' : 'smooth', block: 'start' });
-    }, reduceMotion ? 30 : 1400);
+    }, reduceMotion ? 30 : 2850);
   }
 }
 
@@ -69,18 +113,38 @@ if (updateCountdown()) {
   }, 1000);
 }
 
-// Subtle petals float across the screen without affecting layout or clicks.
+// Petals and delicate rose-colored hearts float together across the page.
+// Keep the mix deliberately sparse on mobile so the invitation stays readable.
+// The elements are decorative only and never intercept taps or clicks.
 if (!reduceMotion) {
   const petalLayer = document.getElementById('petals');
-  for (let i = 0; i < 13; i += 1) {
+  const smallScreen = window.matchMedia('(max-width: 600px)').matches;
+  const petalCount = smallScreen ? 7 : 13;
+  const heartCount = smallScreen ? 4 : 8;
+
+  for (let i = 0; i < petalCount; i += 1) {
     const petal = document.createElement('span');
-    petal.className = 'petal';
+    petal.className = i % 3 === 1 ? 'petal rose-petal' : 'petal';
     petal.style.left = `${(i * 37 + 11) % 100}%`;
-    petal.style.setProperty('--fall-time', `${11 + (i % 6) * 2.5}s`);
-    petal.style.setProperty('--fall-delay', `${-i * 1.8}s`);
-    petal.style.setProperty('--drift', `${(i % 2 ? -1 : 1) * (38 + (i % 5) * 19)}px`);
-    petal.style.scale = `${0.55 + (i % 5) * 0.16}`;
+    petal.style.setProperty('--fall-time', `${15 + (i % 6) * 2.3}s`);
+    petal.style.setProperty('--fall-delay', `${-(i * 2.95 + 2)}s`);
+    petal.style.setProperty('--drift', `${(i % 2 ? -1 : 1) * (24 + (i % 5) * 12)}px`);
+    petal.style.scale = `${0.6 + (i % 5) * 0.13}`;
     petalLayer.appendChild(petal);
+  }
+
+  for (let i = 0; i < heartCount; i += 1) {
+    const heart = document.createElement('span');
+    heart.className = 'heart-petal';
+    heart.textContent = '♥';
+    heart.style.left = `${(i * 43 + 23) % 94 + 3}%`;
+    heart.style.setProperty('--fall-time', `${19 + (i % 4) * 3.5}s`);
+    heart.style.setProperty('--fall-delay', `${-(i * 4.3 + 4)}s`);
+    heart.style.setProperty('--drift', `${(i % 2 ? 1 : -1) * (22 + (i % 4) * 13)}px`);
+    heart.style.setProperty('--heart-size', `${15 + (i % 4) * 2}px`);
+    heart.style.setProperty('--heart-opacity', `${0.40 + (i % 3) * 0.055}`);
+    heart.style.setProperty('--heart-color', i % 2 ? '#bc7082' : '#a94a64');
+    petalLayer.appendChild(heart);
   }
 }
 
